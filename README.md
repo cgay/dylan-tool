@@ -176,6 +176,58 @@ created.  `dylan-tool` makes no attempt to figure out which packages
 are "generic" and which are platform-specific, so it always writes
 platform-specific registry files.
 
+## Building Open Dylan in a Workspace
+
+You can build Open Dylan itself with a workspace instead of using the
+method described in
+[opendylan/README.rst](https://github.com/dylan-lang/opendylan/blob/master/README.rst).
+This section describes how to do that, but assumes you've read
+[opendylan/README.rst](https://github.com/dylan-lang/opendylan/blob/master/README.rst)
+to figure out what your build command should be.
+
+The advantage of building this way is that there's no need to use Git
+submodules. Not a huge benefit in and of itself, but in the long run
+we expect use of the Dylan package system to be less of a maintenance
+burden.
+
+1.  Follow the first two steps in the Quick Start above to build
+    `dylan-tool`.
+
+1.  Create a workspace:
+
+        $ dylan-tool new ws.od opendylan
+        $ cd ws.od
+        $ dylan-tool update
+
+1.  Build Open Dylan. Here I'll assume we're building on Linux with
+    MPS but your build command may differ. The **one** main difference
+    from what's described in
+    [opendylan/README.rst](https://github.com/dylan-lang/opendylan/blob/master/README.rst)
+    is that you **must** pass `SKIP_SUBMODULE_CHECK=1` when you call
+    `make`.  In this example we assume MPS is in the `${DYLAN}`
+    directory and we put the final product in a directory called
+    `opendylan-master`, but you can of course put them both wherever
+    you want to.
+
+        $ cd _build      # So that intermediate build products go here.
+        $ ../opendylan/autogen.sh
+        $ ../opendylan/configure --prefix=${DYLAN}/opendylan-master \
+            --with-mps=${DYLAN}/mps-kit-1.114.0
+        $ make SKIP_SUBMODULE_CHECK=1    # <-- THIS IS NEW
+        $ make install
+
+If all went well, you should now be able to run
+`${DYLAN}/opendylan-master/bin/dylan-compiler -version` and see
+something like "Version 2018.1pre".
+
+As long as people still build Open Dylan with submodules, of course,
+they need to be maintained alongside the package dependencies listed
+in
+[opendylan/pkg.json](https://github.com/dylan-lang/opendylan/blob/master/pkg.json).
+If a dependency is added to (or removed from) Open Dylan, simple add
+(or remove) it to the pkg.json file and run `dylan-tool
+update` and commit that file with your change.
+
 ## Bugs
 
 If you have a feature request, think something should be designed
