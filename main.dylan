@@ -15,9 +15,16 @@ end function;
 // Create the #str:"..." syntax.
 define function str-parser (s :: <string>) => (s :: <string>) s end;
 
+define command-line <dylan-tool-parser> ()
+  option verbose?;
+  option debug?;
+end;
+
 define function main () => (status :: <int>)
-  let debug? = #f;
+  let parser = make(<dylan-tool-parser>);
+  parse-command-line(parser, application-arguments());
   block (exit)
+    exit();
     // TODO: command parsing is ad-hoc because command-line-parser
     //       doesn't do well with subcommands. Needs improvement.
     let app = locator-name(as(<file-locator>, application-name()));
