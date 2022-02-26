@@ -1,0 +1,31 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+#    - name: Checkout json
+#      uses: actions/checkout@v2
+#      with:
+#        repository: dylan-lang/json
+
+    - name: Install Open Dylan
+      run: |
+          echo "Installing Open Dylan..."
+          curl -L -o opendylan.tar.bz2 https://github.com/dylan-lang/opendylan/releases/download/v2020.1.0/opendylan-2020.1-x86_64-linux.tar.bz2
+          tar xfj opendylan.tar.bz2
+          echo -n "This is Open Dylan "
+          opendylan-2020.1/bin/dylan-compiler -version
+
+    - name: Build dylan-tool
+      run: PATH=opendylan-2020.1/bin:$PATH make test-with-submodules
