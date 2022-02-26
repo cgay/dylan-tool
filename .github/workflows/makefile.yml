@@ -5,6 +5,8 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  # This enables the Run Workflow button on the Actions tab.
+  workflow_dispatch:
 
 jobs:
   build:
@@ -13,6 +15,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    
+    - name: debug
+      run: |
+        ls -l
+        find .
 
 #    - name: Checkout json
 #      uses: actions/checkout@v2
