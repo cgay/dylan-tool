@@ -152,6 +152,7 @@ define module workspaces
     active-package-directory,
     active-package-file,
     active-package?,
+    configured-test-libraries,
     find-active-package-library-names,
     find-dylan-package-file,
     find-library-names,

@@ -160,6 +160,11 @@ define function load-json-file (file :: <file-locator>) => (config :: false-or(<
   end
 end function;
 
+define function configured-test-libraries
+    (ws :: <workspace>) => (libraries :: false-or(<seq>)) // of <string>
+  #f // TODO
+end function;
+
 // Find the workspace directory. The nearest directory containing
 // workspace.json always takes precedence. Otherwise the nearest directory
 // containing dylan-package.json.

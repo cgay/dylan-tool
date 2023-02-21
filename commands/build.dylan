@@ -2,7 +2,7 @@ Module: dylan-tool
 Synopsis: dylan build subcommand
 
 
-define class <build-subcommand> (<new-subcommand>)
+define class <build-subcommand> (<subcommand>)
   keyword name = "build";
   keyword help = "Build the configured default libraries.";
 end class;
@@ -40,7 +40,7 @@ define method execute-subcommand
   let all? = get-option-value(subcmd, "all");
   if (all?)
     if (~empty?(library-names))
-      warn("Ignoring --all option. Using the specified libraries instead.");
+      warn("Ignoring --all option; using the specified libraries instead.");
     else
       library-names
         := ws/find-active-package-library-names(workspace);
@@ -76,14 +76,3 @@ define method execute-subcommand
     end;
   end for;
 end method;
-
-define function make-compilation-environment (ws :: ws/<workspace>) => (env :: <table>)
-  let val = as(<string>, ws/workspace-registry-directory(ws));
-  let var = "OPEN_DYLAN_USER_REGISTRIES";
-  let odur = os/environment-variable(var);
-  if (odur)
-    // TODO: export $environment-variable-delimiter from os/.
-    val := concat(val, iff(os/$os-name == #"win32", ";", ":"), odur);
-  end;
-  tabling(<string-table>, var => val)
-end function;

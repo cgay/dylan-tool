@@ -27,3 +27,14 @@ define function run
                                     end);
   values(status, stream.stream-contents)
 end function;
+
+define function make-compilation-environment (ws :: ws/<workspace>) => (env :: <table>)
+  let val = as(<string>, ws/workspace-registry-directory(ws));
+  let var = "OPEN_DYLAN_USER_REGISTRIES";
+  let odur = os/environment-variable(var);
+  if (odur)
+    // TODO: export $environment-variable-delimiter from os/.
+    val := concat(val, iff(os/$os-name == #"win32", ";", ":"), odur);
+  end;
+  tabling(<string-table>, var => val)
+end function;

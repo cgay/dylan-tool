@@ -30,8 +30,9 @@ define function dylan-tool-command-line
                    subcommands: list($new-application-subcommand,
                                      $new-library-subcommand,
                                      $new-workspace-subcommand)),
-              $update-subcommand,
-              $status-subcommand,
               $publish-subcommand,
+              $status-subcommand,
+              $test-subcommand,
+              $update-subcommand,
               $version-subcommand))
 end function;
